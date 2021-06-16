@@ -30,8 +30,8 @@ const sol2 = [
 ];
 
 test("preselected data", () => {
-    expect(solution(mat, [[0, 1], [1, 2], [2, 0]], { height: 3, width: 3 })).toEqual(sol)
-    expect(solution(mat2, [[0, 1], [2, 2]], { height: 5, width: 4 })).toEqual(sol2)
+    expect(solution([[0, 1], [1, 2], [2, 0]], { height: 3, width: 3 })).toEqual(sol)
+    expect(solution([[0, 1], [2, 2]], { height: 5, width: 4 })).toEqual(sol2)
 })
 
 test('couple of random tests', () => {
@@ -43,6 +43,6 @@ test('couple of random tests', () => {
             size,
         } = createRandomBitmap(0.3, 1, 20)
 
-        expect(solution(matrix, brightCoords, size)).toEqual(sol)
+        expect(solution(brightCoords, size)).toEqual(sol)
     }
 })
