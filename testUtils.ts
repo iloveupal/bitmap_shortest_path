@@ -18,6 +18,7 @@ const distance = (coordA: [number, number], coordB: [number, number]) => {
 }
 
 const naiveSolution = (matrix: number[][], brightCoords: Array<[number, number]>) => {
+    console.time('generate.naiveSolve')
     const solution = genMatrix(matrix.length, matrix[0].length)
 
     for (let i = 0; i < matrix.length; i++) {
@@ -33,6 +34,7 @@ const naiveSolution = (matrix: number[][], brightCoords: Array<[number, number]>
         }
     }
 
+    console.timeEnd('generate.naiveSolve')
     return solution
 }
 
@@ -45,6 +47,7 @@ export const createRandomBitmap = (density: number, minSize: number, maxSize: nu
     },
     solution: number[][],
 } => {
+    console.time('generate.create')
     const n = random.int(minSize, maxSize)
     const m = random.int(minSize, maxSize)
 
@@ -62,6 +65,7 @@ export const createRandomBitmap = (density: number, minSize: number, maxSize: nu
             }
         }
     }
+    console.timeEnd('generate.create')
 
     if (brightCoords.length === 0) {
         // try until you make it

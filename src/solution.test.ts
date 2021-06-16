@@ -29,11 +29,8 @@ const sol2 = [
     [4, 3, 2, 3]
 ];
 
-test("small dense matrices", () => {
+test("preselected data", () => {
     expect(solution(mat, [[0, 1], [1, 2], [2, 0]], { height: 3, width: 3 })).toEqual(sol)
-})
-
-test("not so small matrices", () => {
     expect(solution(mat2, [[0, 1], [2, 2]], { height: 5, width: 4 })).toEqual(sol2)
 })
 
@@ -45,19 +42,6 @@ test('couple of random tests', () => {
             brightCoords,
             size,
         } = createRandomBitmap(0.3, 1, 20)
-
-        expect(solution(matrix, brightCoords, size)).toEqual(sol)
-    }
-})
-
-test('large matrices', () => {
-    for (let i = 0; i < 10; i++) {
-        const {
-            solution: sol,
-            matrix,
-            brightCoords,
-            size,
-        } = createRandomBitmap(0.3, 60, 182)
 
         expect(solution(matrix, brightCoords, size)).toEqual(sol)
     }
