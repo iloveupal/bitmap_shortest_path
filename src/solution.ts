@@ -1,7 +1,7 @@
 const isGenerator = (val: any): boolean => val && !!val.next
 
 import {
-    Matrix, Vector, Size
+    Bitmap, Vector, Size
 } from './types'
 
 import {
@@ -10,44 +10,43 @@ import {
     UP,
     DOWN,
     rightTurnFn,
-    createMatrix,
+    createBitmap,
     set,
     get,
     add,
-    isOutsideMatrix,
+    isOutsideBitmap,
 } from './utils'
 
-
 function * pathwalkGenerator(
-    mat: Matrix,
+    bitmap: Bitmap,
     startPosition: Vector,
     direction: Vector,
     startValue: number,
-    afterEachStepDo?: (mat: Matrix, start: Vector, dir: Vector, value: number) => any
+    afterEachStepDo?: (bitmap: Bitmap, start: Vector, dir: Vector, value: number) => any
 ) {
     let position = startPosition
     let value = startValue
     while (true) {
-        if (isOutsideMatrix(mat, position) || get(mat, position) <= value) {
+        if (isOutsideBitmap(bitmap, position) || get(bitmap, position) <= value) {
             return
         }
-        set(mat, position, value)
-        yield afterEachStepDo ? afterEachStepDo(mat, position, direction, value) : null
+        set(bitmap, position, value)
+        yield afterEachStepDo ? afterEachStepDo(bitmap, position, direction, value) : null
         value += 1
         position = add(position, direction)
     } 
 }
 
-function turnRightGenerator(mat: Matrix, start: Vector, dir: Vector, value: number) {
+function turnRightGenerator(bitmap: Bitmap, start: Vector, dir: Vector, value: number) {
     const newDir = rightTurnFn.get(dir)!
-    return pathwalkGenerator(mat, add(start, newDir), newDir, value + 1)
+    return pathwalkGenerator(bitmap, add(start, newDir), newDir, value + 1)
 }
 
-const initializeRadianceGenerators = (mat: Matrix, start: Vector, val: number) => [LEFT, UP, RIGHT, DOWN].map((dir) => pathwalkGenerator(mat, add(start, dir), dir, val, turnRightGenerator))
+const initializeRadianceGenerators = (bitmap: Bitmap, start: Vector, val: number) => [LEFT, UP, RIGHT, DOWN].map((dir) => pathwalkGenerator(bitmap, add(start, dir), dir, val, turnRightGenerator))
 
-export function solution(lightSources: Array<Vector>, size: Size): Matrix {
-    const maxDistance = size.height + size.width - 2 // assuming there's at least one bright pixel in the matrix
-    const sol = createMatrix(size, maxDistance)
+export function solution(whitePixels: Array<Vector>, size: Size): Bitmap {
+    const maxDistance = size.height + size.width - 2 // assuming there's at least one white pixel in the bitmap
+    const sol = createBitmap(size, maxDistance)
 
     const lightSourcesContext: Map<Vector, {
         generators: Generator[],
@@ -56,8 +55,8 @@ export function solution(lightSources: Array<Vector>, size: Size): Matrix {
 
     let doneCount = 0
 
-    while (doneCount < lightSources.length) {
-        for (let position of lightSources) {
+    while (doneCount < whitePixels.length) {
+        for (let position of whitePixels) {
             if (!lightSourcesContext.has(position)) {
                 set(sol, position, 0)
                 lightSourcesContext.set(position, {
